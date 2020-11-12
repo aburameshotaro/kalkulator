@@ -115,6 +115,13 @@ public class Kalkulator extends JFrame{
         c.gridy = 1;
         pane.add(button, c);
 
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            tf.setText("0");
+            }
+        });
+
         button = new JButton("AC");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -122,6 +129,21 @@ public class Kalkulator extends JFrame{
         c.gridx = 4;
         c.gridy = 2;
         pane.add(button, c);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = tf.getText();
+                int max = text.lastIndexOf("+");
+                if (text.lastIndexOf("-")>max)
+                    max = text.lastIndexOf("-");
+                if (text.lastIndexOf("/")>max)
+                    max=text.lastIndexOf("/");
+                if (text.lastIndexOf("*")>max)
+                    max=text.lastIndexOf("*");
+                tf.setText(text.substring(0, max+1));
+            }
+        });
 
         button = new JButton("(");
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -131,6 +153,18 @@ public class Kalkulator extends JFrame{
         c.gridy = 3;
         pane.add(button, c);
 
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton b = (JButton) e.getSource();
+                String text = tf.getText();
+                String b_text = b.getText();
+                char lastChar = text.charAt(text.length() - 1);
+                if (lastChar =='+' || lastChar=='-' || lastChar=='/' || lastChar=='*')
+                    tf.setText(text + b_text);
+            }
+        });
+
         button = new JButton(")");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -138,6 +172,20 @@ public class Kalkulator extends JFrame{
         c.gridx = 4;
         c.gridy = 4;
         pane.add(button, c);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton b = (JButton) e.getSource();
+                String text = tf.getText();
+                String b_text = b.getText();
+                long count1 = text.chars().filter(ch -> ch == '(').count();
+                long count2 = text.chars().filter(ch -> ch == ')').count();
+                char lastChar = text.charAt(text.length() - 1);
+                if (lastChar !='+' && lastChar!='-' && lastChar!='/' && lastChar!='*' && count2<count1)
+                    tf.setText(text + b_text);
+            }
+        });
 
         button = new JButton("+/-");
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -197,7 +245,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -218,7 +266,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -239,7 +287,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -259,7 +307,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -280,7 +328,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -301,7 +349,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -321,7 +369,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -342,7 +390,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -363,7 +411,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -384,7 +432,7 @@ public class Kalkulator extends JFrame{
                 String b_text = b.getText();
                 if (text.charAt(0)!='0')
                     tf.setText(text + b_text);
-                if (text.charAt(0)=='0')
+                if (text.charAt(0)=='0' && text.length()==1)
                     tf.setText(b_text);
             }
         });
@@ -412,3 +460,4 @@ public class Kalkulator extends JFrame{
 
     }
 }
+

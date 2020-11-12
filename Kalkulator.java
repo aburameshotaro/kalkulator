@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 
 public class Kalkulator extends JFrame{
     JFrame f;
+    static JTextField tf;
 
     public static void addComponentsToPane(Container pane) {
 
@@ -19,7 +20,7 @@ public class Kalkulator extends JFrame{
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        JTextField tf=new JTextField("0");
+
         tf.setHorizontalAlignment(JTextField.RIGHT);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -32,18 +33,14 @@ public class Kalkulator extends JFrame{
         button = new JButton("%");
         c.gridwidth = 1;
         c.ipady = 0;
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.insets = new Insets(5,5,5,5);
         c.gridy = 1;
         pane.add(button, c);
 
         b_sign = new JButton("/");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 1;
-        c.gridy = 1;
         pane.add(b_sign, c);
 
         b_sign.addActionListener(new ActionListener() {
@@ -62,11 +59,8 @@ public class Kalkulator extends JFrame{
         });
 
         b_sign = new JButton("*");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 2;
-        c.gridy = 1;
         pane.add(b_sign, c);
 
         b_sign.addActionListener(new ActionListener() {
@@ -85,11 +79,8 @@ public class Kalkulator extends JFrame{
         });
 
         b_sign = new JButton("-");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 3;
-        c.gridy = 1;
         pane.add(b_sign, c);
 
         b_sign.addActionListener(new ActionListener() {
@@ -108,11 +99,9 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton("C");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.insets = new Insets(5,10,5,5);
         c.gridx = 4;
-        c.gridy = 1;
         pane.add(button, c);
 
         button.addActionListener(new ActionListener() {
@@ -123,9 +112,7 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton("AC");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,10,5,5);
         c.gridx = 4;
         c.gridy = 2;
         pane.add(button, c);
@@ -134,21 +121,13 @@ public class Kalkulator extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = tf.getText();
-                int max = text.lastIndexOf("+");
-                if (text.lastIndexOf("-")>max)
-                    max = text.lastIndexOf("-");
-                if (text.lastIndexOf("/")>max)
-                    max=text.lastIndexOf("/");
-                if (text.lastIndexOf("*")>max)
-                    max=text.lastIndexOf("*");
+                int max = findLastSign(text);
                 tf.setText(text.substring(0, max+1));
             }
         });
 
         button = new JButton("(");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,10,5,5);
         c.gridx = 4;
         c.gridy = 3;
         pane.add(button, c);
@@ -166,9 +145,7 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton(")");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,10,5,5);
         c.gridx = 4;
         c.gridy = 4;
         pane.add(button, c);
@@ -188,9 +165,7 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton("+/-");
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
-        c.insets = new Insets(5,10,5,5);
         c.gridx = 4;
         c.gridy = 5;
         pane.add(button, c);
@@ -220,20 +195,14 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton("=");
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
-        c.gridx = 3;
         c.gridheight = 2;
         c.gridy = 4;
         pane.add(button, c);
 
         b_numerical = new JButton("7");
-        c.gridwidth = 1;
         c.gridheight = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.insets = new Insets(5,5,5,5);
         c.gridy = 2;
         pane.add(b_numerical, c);
 
@@ -251,11 +220,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("8");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 1;
-        c.gridy = 2;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -272,11 +237,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("9");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 2;
-        c.gridy = 2;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -293,8 +254,6 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("4");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 0;
         c.gridy = 3;
         pane.add(b_numerical, c);
@@ -313,11 +272,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("5");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 1;
-        c.gridy = 3;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -334,11 +289,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("6");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 2;
-        c.gridy = 3;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -355,8 +306,6 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("1");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 0;
         c.gridy = 4;
         pane.add(b_numerical, c);
@@ -375,11 +324,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("2");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 1;
-        c.gridy = 4;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -396,11 +341,7 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("3");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 2;
-        c.gridy = 4;
         pane.add(b_numerical, c);
 
         b_numerical.addActionListener(new ActionListener() {
@@ -417,8 +358,6 @@ public class Kalkulator extends JFrame{
         });
 
         b_numerical = new JButton("0");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 0;       //aligned with button 2
         c.gridwidth = 2;   //2 columns wide
         c.gridy = 5;
@@ -438,19 +377,27 @@ public class Kalkulator extends JFrame{
         });
 
         button = new JButton(",");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5,5,5,5);
         c.gridx = 2;       //aligned with button 2
         c.gridwidth = 1;   //2 columns wide
-        c.gridy = 5;
         pane.add(button, c);
 
 
     }
 
+    public static int findLastSign(String text){
+        int max = text.lastIndexOf("+");
+        if (text.lastIndexOf("-")>max)
+            max = text.lastIndexOf("-");
+        if (text.lastIndexOf("/")>max)
+            max=text.lastIndexOf("/");
+        if (text.lastIndexOf("*")>max)
+            max=text.lastIndexOf("*");
+        return max;
+    }
 
     Kalkulator(){
         f=new JFrame();
+        tf =new JTextField("0");
         addComponentsToPane(f.getContentPane());
 
 
@@ -460,4 +407,3 @@ public class Kalkulator extends JFrame{
 
     }
 }
-

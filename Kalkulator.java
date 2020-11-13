@@ -5,12 +5,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.Iterator;
+import java.util.Stack;
 
 public class Kalkulator extends JFrame{
     JFrame f;
     static JLabel tf;
+    static Boolean divisionByZero;
 
     public static void addComponentsToPane(Container pane) {
 
@@ -19,7 +20,7 @@ public class Kalkulator extends JFrame{
         JButton b_sign;
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
+        divisionByZero=false;
 
         tf.setHorizontalAlignment(JLabel.RIGHT);
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -41,11 +42,13 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = tf.getText();
-                if(text.length() > 1)
-                    tf.setText(text.substring(0,text.length()-1));
-                if (text.length() == 1)
-                    tf.setText("0");
+                if(!divisionByZero){
+                    String text = tf.getText();
+                    if (text.length() > 1)
+                        tf.setText(text.substring(0, text.length() - 1));
+                    if (text.length() == 1)
+                        tf.setText("0");
+                }
             }
         });
 
@@ -57,7 +60,7 @@ public class Kalkulator extends JFrame{
         b_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                signButtonReaction(e);
+                    signButtonReaction(e);
             }
         });
 
@@ -69,7 +72,8 @@ public class Kalkulator extends JFrame{
         b_sign.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                signButtonReaction(e);
+                    signButtonReaction(e);
+
             }
         });
 
@@ -95,6 +99,7 @@ public class Kalkulator extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
             tf.setText("0");
+            divisionByZero=false;
             }
         });
 
@@ -107,9 +112,14 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = tf.getText();
-                int max = findLastSign(text);
-                tf.setText(text.substring(0, max+1));
+                if(!divisionByZero){
+                    String text = tf.getText();
+                    int max = findLastSign(text);
+                    if (max !=0)
+                        tf.setText(text.substring(0, max+1));
+                    else
+                        tf.setText("0");
+                }
             }
         });
 
@@ -122,12 +132,14 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton b = (JButton) e.getSource();
-                String text = tf.getText();
-                String b_text = b.getText();
-                char lastChar = text.charAt(text.length() - 1);
-                if (lastChar =='+' || lastChar=='-' || lastChar=='/' || lastChar=='*')
-                    tf.setText(text + b_text);
+                if(!divisionByZero){
+                     JButton b = (JButton) e.getSource();
+                     String text = tf.getText();
+                     String b_text = b.getText();
+                     char lastChar = text.charAt(text.length() - 1);
+                     if (lastChar =='+' || lastChar=='-' || lastChar=='/' || lastChar=='*')
+                         tf.setText(text + b_text);
+                }
             }
         });
 
@@ -140,14 +152,16 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton b = (JButton) e.getSource();
-                String text = tf.getText();
-                String b_text = b.getText();
-                long count1 = text.chars().filter(ch -> ch == '(').count();
-                long count2 = text.chars().filter(ch -> ch == ')').count();
-                char lastChar = text.charAt(text.length() - 1);
-                if (lastChar !='+' && lastChar!='-' && lastChar!='/' && lastChar!='*'&& lastChar!='(' && count2<count1)
-                    tf.setText(text + b_text);
+                if(!divisionByZero){
+                    JButton b = (JButton) e.getSource();
+                    String text = tf.getText();
+                    String b_text = b.getText();
+                    long count1 = text.chars().filter(ch -> ch == '(').count();
+                    long count2 = text.chars().filter(ch -> ch == ')').count();
+                    char lastChar = text.charAt(text.length() - 1);
+                    if (lastChar !='+' && lastChar!='-' && lastChar!='/' && lastChar!='*'&& lastChar!='(' && count2<count1)
+                        tf.setText(text + b_text);
+                }
             }
         });
 
@@ -160,23 +174,25 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton b = (JButton) e.getSource();
-                String text = tf.getText();
-                int lastSign = findLastSignExtra(text);
-                if (lastSign == -1)
-                    tf.setText('-' + text);
-                else if (text.charAt(lastSign)=='+')
-                    tf.setText(text.substring(0,lastSign) + '-' + text.substring(lastSign+1));
-                else if (text.charAt(lastSign)=='-' && lastSign!=0 && text.charAt(lastSign-1)!='(')
-                    tf.setText(text.substring(0,lastSign) + '+' + text.substring(lastSign+1));
-                else if (text.charAt(lastSign)=='-' && lastSign==0 || text.charAt(lastSign-1)=='(')
-                    tf.setText(text.substring(0,lastSign) + text.substring(lastSign+1));
-                else if (text.charAt(lastSign)=='*')
-                    tf.setText(text.substring(0,lastSign) + "*(-" + text.substring(lastSign+1));
-                else if (text.charAt(lastSign)=='/')
-                    tf.setText(text.substring(0,lastSign) + "/(-" + text.substring(lastSign+1));
-                else if (text.charAt(lastSign)=='(')
-                    tf.setText(text.substring(0,lastSign) + "(-" + text.substring(lastSign+1));
+                if(!divisionByZero){
+                    JButton b = (JButton) e.getSource();
+                    String text = tf.getText();
+                    int lastSign = findLastSignExtra(text);
+                    if (lastSign == -1)
+                        tf.setText('-' + text);
+                    else if (text.charAt(lastSign)=='+')
+                        tf.setText(text.substring(0,lastSign) + '-' + text.substring(lastSign+1));
+                    else if (text.charAt(lastSign)=='-' && lastSign!=0 && text.charAt(lastSign-1)!='(')
+                        tf.setText(text.substring(0,lastSign) + '+' + text.substring(lastSign+1));
+                    else if (text.charAt(lastSign)=='-' && lastSign==0 || text.charAt(lastSign-1)=='(')
+                        tf.setText(text.substring(0,lastSign) + text.substring(lastSign+1));
+                    else if (text.charAt(lastSign)=='*')
+                        tf.setText(text.substring(0,lastSign) + "*(-" + text.substring(lastSign+1));
+                    else if (text.charAt(lastSign)=='/')
+                        tf.setText(text.substring(0,lastSign) + "/(-" + text.substring(lastSign+1));
+                    else if (text.charAt(lastSign)=='(')
+                        tf.setText(text.substring(0,lastSign) + "(-" + text.substring(lastSign+1));
+                }
             }
         });
 
@@ -200,6 +216,25 @@ public class Kalkulator extends JFrame{
         c.gridheight = 2;
         c.gridy = 4;
         pane.add(button, c);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!divisionByZero){
+                    String text = tf.getText();
+                    long count1 = text.chars().filter(ch -> ch == '(').count();
+                    long count2 = text.chars().filter(ch -> ch == ')').count();
+                    while(count1 >count2){
+                        text = text + ')';
+                        count2++;
+                    }
+                    text += ';';
+                    String outcome = evaluate(text);
+                    tf.setText(outcome);
+                }
+
+            }
+        });
 
         b_numerical = new JButton("7");
         c.gridheight = 1;
@@ -326,46 +361,52 @@ public class Kalkulator extends JFrame{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = tf.getText();
-                String b_text = ".";
-                char lastChar = text.charAt(text.length() - 1);
-                int lastSign = findLastSign(text);
-                String temp_text;
-                if (lastSign!=text.length()-1 && lastChar!=')' && lastChar!='(' ){
-                    if (lastSign !=-1)
-                        temp_text = text.substring(lastSign+1);
-                    else
-                        temp_text=text;
-                    if(temp_text.indexOf('.') == -1)
-                        tf.setText(text + b_text);
+                if(!divisionByZero){
+                    String text = tf.getText();
+                    String b_text = ".";
+                    char lastChar = text.charAt(text.length() - 1);
+                    int lastSign = findLastSign(text);
+                    String temp_text;
+                    if (lastSign!=text.length()-1 && lastChar!=')' && lastChar!='(' ){
+                        if (lastSign !=-1)
+                            temp_text = text.substring(lastSign+1);
+                        else
+                            temp_text=text;
+                        if(temp_text.indexOf('.') == -1)
+                            tf.setText(text + b_text);
 
                 }
+            }
             }
         });
 
     }
 
     public static void signButtonReaction(ActionEvent e){
-        JButton b = (JButton) e.getSource();
-        String text = tf.getText();
-        String b_text = b.getText();
-        char lastChar = text.charAt(text.length() - 1);
-        if (lastChar =='+' || lastChar=='-' || lastChar=='/' || lastChar=='*')
-            tf.setText(text.substring(0, text.length() - 1) + b_text);
-        else
-            tf.setText(text + b_text);
+        if(!divisionByZero){
+            JButton b = (JButton) e.getSource();
+            String text = tf.getText();
+            String b_text = b.getText();
+            char lastChar = text.charAt(text.length() - 1);
+            if (lastChar == '+' || lastChar == '-' || lastChar == '/' || lastChar == '*')
+                tf.setText(text.substring(0, text.length() - 1) + b_text);
+            else
+                tf.setText(text + b_text);
+        }
     }
 
     public static void numericalButtonReaction(ActionEvent e){
-        JButton b = (JButton) e.getSource();
-        String text = tf.getText();
-        String b_text = b.getText();
-        if (text.charAt(0)!='0' && text.charAt(text.length()-1)!=')')
-            tf.setText(text + b_text);
-        if (text.charAt(text.length()-1)==')')
-            tf.setText(text + '*' + b_text);
-        if (text.charAt(0)=='0' && text.length()==1)
-            tf.setText(b_text);
+        if(!divisionByZero){
+            JButton b = (JButton) e.getSource();
+            String text = tf.getText();
+            String b_text = b.getText();
+            if (text.charAt(text.length() - 1) != ')')
+                tf.setText(text + b_text);
+            if (text.charAt(text.length() - 1) == ')')
+                tf.setText(text + '*' + b_text);
+            if (text.charAt(0) == '0' && text.length() == 1)
+                tf.setText(b_text);
+        }
     }
 
 
@@ -388,6 +429,212 @@ public class Kalkulator extends JFrame{
             max = text.lastIndexOf(")");
         return max;
     }
+
+    public static String evaluate(String input) {
+        String result = "0";
+        Stack <Double> numbers = new Stack();
+        Stack <Character> signs = new Stack();
+        Boolean activeMinus = false;
+        int i = 0;
+        if (input.charAt(0)=='-') {
+            activeMinus = true;
+            input = input.substring(1);
+        }
+        while (input.charAt(0)!=';'){
+            if ( input.charAt(0)>='0' && input.charAt(0)<='9' ){
+                int signIndex = findFirstSignExtra(input);
+                if (activeMinus) {
+                    numbers.push(Double.valueOf('-' + input.substring(0, signIndex)));
+                    activeMinus=false;
+                }
+                else
+                    numbers.push(Double.valueOf(input.substring(0,signIndex)));
+                input = input.substring(signIndex);
+            }
+
+            if (input.charAt(0)=='('){
+                signs.push('(');
+                input = input.substring(1);
+                if(input.charAt(0)=='-'){
+                    activeMinus=true;
+                    input = input.substring(1);
+                }
+            }
+
+            if (input.charAt(0)=='*' || input.charAt(0)=='/'){
+                if( !signs.empty() && signs.peek()=='*'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    numbers.push(number1*number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+                else if ( !signs.empty()  && signs.peek()=='/'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    if (number2 ==0) {
+                        divisionByZero=true;
+                        return "No one should divide by 0";
+                    }
+                    numbers.push(number1/number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+
+                else{
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+            }
+
+            if (input.charAt(0)=='+' || input.charAt(0)=='-'){
+                if( !signs.empty() && signs.peek()=='*'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    numbers.push(number1*number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+                else if ( !signs.empty()  && signs.peek()=='/'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    if (number2 ==0) {
+                        divisionByZero=true;
+                        return "No one should divide by 0";
+                    }
+                    numbers.push(number1/number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+
+                else if ( !signs.empty()  && signs.peek()=='+'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    numbers.push(number1+number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+
+                else if ( !signs.empty()  && signs.peek()=='-'){
+                    double number2 = numbers.pop();
+                    double number1 = numbers.pop();
+                    numbers.push(number1-number2);
+                    signs.pop();
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+
+                else{
+                    signs.push(input.charAt(0));
+                    input = input.substring(1);
+                }
+            }
+
+            if(input.charAt(0)==')'){
+                input = input.substring(1);
+                while( signs.peek()!='('){
+                    if(signs.peek() == '*'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1*number2);
+                        signs.pop();
+                    }
+                    if(signs.peek() == '/'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        if (number2 ==0) {
+                            divisionByZero=true;
+                            return "No one should divide by 0";
+                        }
+                        numbers.push(number1/number2);
+                        signs.pop();
+                    }
+                    if(signs.peek() == '+'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1+number2);
+                        signs.pop();
+                    }
+                    if(signs.peek() == '-'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1-number2);
+                        signs.pop();
+                    }
+                }
+                signs.pop();
+
+            }
+
+            if(input.charAt(0)==';'){
+                while(!signs.empty()){
+                    if(signs.peek() == '*'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1*number2);
+                        signs.pop();
+                        continue;
+                    }
+                    if(signs.peek() == '/'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        if (number2 ==0) {
+                            divisionByZero=true;
+                            return "No one should divide by 0";
+                        }
+                        numbers.push(number1/number2);
+                        signs.pop();
+                        continue;
+                    }
+                    if(signs.peek() == '+'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1+number2);
+                        signs.pop();
+                        continue;
+                    }
+                    if(signs.peek() == '-'){
+                        double number2 = numbers.pop();
+                        double number1 = numbers.pop();
+                        numbers.push(number1-number2);
+                        signs.pop();
+                        continue;
+                    }
+                }
+            }
+
+        }
+
+
+        return String.valueOf(numbers.peek());
+    }
+
+    public static int findFirstSignExtra(String text){
+        int min = Integer.MAX_VALUE;
+        if (text.indexOf("+")<min && text.indexOf("+") != -1)
+            min = text.indexOf("+");
+        if (text.indexOf("-")<min && text.indexOf("-") != -1)
+            min = text.indexOf("-");
+        if (text.indexOf("/")<min && text.indexOf("/") != -1)
+            min=text.indexOf("/");
+        if (text.indexOf("*")<min && text.indexOf("*") != -1)
+            min=text.indexOf("*");
+        if (text.indexOf("(")<min && text.indexOf("(") != -1)
+            min = text.indexOf("(");
+        if (text.indexOf(")")<min && text.indexOf(")") != -1)
+            min = text.indexOf(")");
+        if (text.indexOf(";")<min && text.indexOf(";") != -1)
+            min = text.indexOf(";");
+        if(min == Integer.MAX_VALUE)
+            min=-1;
+        return min;
+    }
+
 
     Kalkulator(){
         f=new JFrame();

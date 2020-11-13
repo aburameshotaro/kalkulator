@@ -5,13 +5,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.util.Iterator;
 import java.util.Stack;
 
 public class Kalkulator extends JFrame{
     JFrame f;
     static JLabel tf;
-    static Boolean divisionByZero;
+    static boolean divisionByZero;
 
     public static void addComponentsToPane(Container pane) {
 
@@ -175,7 +174,6 @@ public class Kalkulator extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!divisionByZero){
-                    JButton b = (JButton) e.getSource();
                     String text = tf.getText();
                     int lastSign = findLastSignExtra(text);
                     if (lastSign == -1)
@@ -431,11 +429,9 @@ public class Kalkulator extends JFrame{
     }
 
     public static String evaluate(String input) {
-        String result = "0";
         Stack <Double> numbers = new Stack();
         Stack <Character> signs = new Stack();
-        Boolean activeMinus = false;
-        int i = 0;
+        boolean activeMinus = false;
         if (input.charAt(0)=='-') {
             activeMinus = true;
             input = input.substring(1);
@@ -610,6 +606,8 @@ public class Kalkulator extends JFrame{
 
         }
 
+        if(numbers.peek() == (numbers.peek() - numbers.peek()%1) )
+            return (String.valueOf(numbers.peek()).substring(0, String.valueOf(numbers.peek()).length()-2));
 
         return String.valueOf(numbers.peek());
     }

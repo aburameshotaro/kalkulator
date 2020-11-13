@@ -222,13 +222,17 @@ public class Kalkulator extends JFrame{
                     String text = tf.getText();
                     long count1 = text.chars().filter(ch -> ch == '(').count();
                     long count2 = text.chars().filter(ch -> ch == ')').count();
-                    while(count1 >count2){
-                        text = text + ')';
-                        count2++;
+                    int lastSign = findLastSign(text);
+                    if (!(lastSign == text.length()-1)) {
+
+                        while (count1 > count2) {
+                            text = text + ')';
+                            count2++;
+                        }
+                        text += ';';
+                        String outcome = evaluate(text);
+                        tf.setText(outcome);
                     }
-                    text += ';';
-                    String outcome = evaluate(text);
-                    tf.setText(outcome);
                 }
 
             }
